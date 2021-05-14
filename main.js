@@ -29,10 +29,32 @@ const articles = [
     },
     ];
 
-app.get("/articles",(req,res)=>{
+// getAllArticles:
+const getAllArticles = (req,res)=>{
     res.status = 200;
     res.json(articles);
-})
+}
+app.get("/articles",getAllArticles)
+
+// getAnArticleById:
+const getAnArticleById = (req,res)=>{
+    const articleId = JSON.parse(req.params.id);
+    let found = false
+    for (let i = 0 ;  i < articles.length ; i++){
+        let idSearch = articles[i].id;
+        if(articleId === idSearch){
+            found = true
+        }
+    }
+    if (found){
+        res.status(200);
+        res.json(articles[articleId-1]);
+    } else {
+    res.status(404);
+    res.json(`article doesn't exist`);
+    }
+};
+app.get(`/articles/:id`,getAnArticleById)
 
 app.listen(PORT, ()=>{
     console.log(`the server is running on port: ${PORT}`);
