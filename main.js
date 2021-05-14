@@ -1,9 +1,11 @@
 const express = require("express");
+const {uuid} = require(`uuidv4`);
 
 const app = express();
 const PORT = 5000;
 
 app.use(express.json());
+
 
 const articles = [
     {
@@ -73,6 +75,22 @@ const getArticlesByAuthor = (req,res)=>{
 }
 
 app.get(`/articles/search_1`, getArticlesByAuthor);
+
+
+// createNewArticle
+const createNewArticle = (req,res)=>{
+    const addedArticle = {
+        "title" : req.body.title,
+        "description" : req.body.description,
+        "author" : req.body.author,
+        "id" : uuid()
+    }
+    articles.push(addedArticle);
+    res.status(201);
+    res.json(addedArticle);
+}
+
+app.post(`/articles`, createNewArticle)
 
 app.listen(PORT, ()=>{
     console.log(`the server is running on port: ${PORT}`);
