@@ -86,12 +86,46 @@ const createNewArticle = (req,res)=>{
         "id" : uuid()
     }
     articles.push(addedArticle);
+    console.log(articles);
     res.status(201);
     res.json(addedArticle);
 }
 
 app.post(`/articles`, createNewArticle)
 
+// updateAnArticleById
+const updateAnArticleById = (req,res)=>{
+    const articleId = JSON.parse(req.params.id);
+    let found = false
+    for (let i = 0 ;  i < articles.length ; i++){
+        let idSearch = articles[i].id;
+        if(articleId === idSearch){
+            found = true
+        }
+    }
+    if (found){
+        // articles[articleId-1] ={
+        //     "title" : req.body.title,
+        //     "description" : req.body.description,
+        //     "author" : req.body.author
+        // }
+        if (req.body.title){
+            articles[articleId-1].title = req.body.title
+        }
+        if (req.body.description){
+            articles[articleId-1].description = req.body.description
+        }
+        if (req.body.author){
+            articles[articleId-1].author = req.body.author
+        }
+        res.json(articles[articleId-1])
+    } else {
+        res.status(404);
+        res.json(`article doesn't exist`)
+    }
+}
+
+app.put(`/articles/:id`,updateAnArticleById)
 app.listen(PORT, ()=>{
     console.log(`the server is running on port: ${PORT}`);
 })
