@@ -147,6 +147,23 @@ const deleteArticleById = (req,res)=>{
 
 app.delete(`/articles/:id`, deleteArticleById);
 
+// deleteArticlesByAuthor
+const deleteArticlesByAuthor = (req,res)=>{
+    const author = req.body.author;
+    for (let i =0; i<articles.length ; i++){
+        if (author.toLowerCase() === (articles[i].author).toLowerCase()){
+            articles.splice(i,1);
+            i--
+        }
+    }
+    const opSuccess = {
+        "success" : true,
+        "message" : `Success Delete article with author => ${author}`
+    };
+    res.json(opSuccess);
+}
+
+app.delete(`/articles`, deleteArticlesByAuthor);
 app.listen(PORT, ()=>{
     console.log(`the server is running on port: ${PORT}`);
 })
