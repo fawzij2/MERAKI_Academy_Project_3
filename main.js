@@ -31,14 +31,14 @@ const articles = [
 
 // getAllArticles:
 const getAllArticles = (req,res)=>{
-    res.status = 200;
+    res.status(200);
     res.json(articles);
 }
-app.get("/articles",getAllArticles)
+app.get("/articles",getAllArticles);
 
 // getAnArticleById:
 const getAnArticleById = (req,res)=>{
-    const articleId = JSON.parse(req.params.id);
+    const articleId = JSON.parse(req.query.id);
     let found = false
     for (let i = 0 ;  i < articles.length ; i++){
         let idSearch = articles[i].id;
@@ -54,7 +54,25 @@ const getAnArticleById = (req,res)=>{
     res.json(`article doesn't exist`);
     }
 };
-app.get(`/articles/:id`,getAnArticleById)
+app.get(`/articles/search_2`,getAnArticleById);
+
+// getArticlesByAuthor;
+const getArticlesByAuthor = (req,res)=>{
+    const author = req.query.author;
+    console.log(author);
+    const foundArticles = articles.filter((elem,i)=>{
+        return author === elem.author
+    })
+    if (foundArticles.length > 0){
+        res.status(200);
+        res.json(foundArticles)
+    } else{
+        res.status(404);
+        res.json("articles not found");
+    }
+}
+
+app.get(`/articles/search_1`, getArticlesByAuthor);
 
 app.listen(PORT, ()=>{
     console.log(`the server is running on port: ${PORT}`);
