@@ -48,28 +48,24 @@ app.get("/articles",getAllArticles);
 
 // getAnArticleById:
 const getAnArticleById = (req,res)=>{
-    const articleId = JSON.parse(req.query.id);
-    let found = false
-    for (let i = 0 ;  i < articles.length ; i++){
-        let idSearch = articles[i].id;
-        if(articleId === idSearch){
-            found = true
-        }
-    }
-    if (found){
+    const articleId = req.query.id;
+    Article.find({_id:articleId})
+    .populate("author","firstName")
+    // .exec()
+    .then((result)=>{
         res.status(200);
-        res.json(articles[articleId-1]);
-    } else {
-        res.status(404);
-        res.json(`article doesn't exist`);
-    }
-};
+        res.json(result);
+    })
+    .catch((err)=>{
+        res.json(err)
+    })
+}
 app.get(`/articles/search_2`,getAnArticleById);
 
 // getArticlesByAuthor;
 const getArticlesByAuthor = (req,res)=>{
     const author = req.query.author;
-    console.log(author);
+    // console.log(author);
     Article.find({author:author})
     .then((result)=>{
         res.status(200)
