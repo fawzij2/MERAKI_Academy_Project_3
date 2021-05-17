@@ -138,25 +138,14 @@ app.put(`/articles/:id`,updateAnArticleById);
 
 // deleteArticleById
 const deleteArticleById = (req,res)=>{
-    const articleId = JSON.parse(req.params.id);
-    let found = false
-    for (let i = 0 ;  i < articles.length ; i++){
-        let idSearch = articles[i].id;
-        if(articleId === idSearch){
-            found = true
+    const articleId = req.params.id;
+    Article.deleteOne({_id:articleId},(err)=>{
+        if(err){
+            res.json(err)
+        } else{
+            res.json("delete successful")
         }
-    }
-    if (found){
-        articles.splice(articleId-1,1);
-        const opSuccess = {
-            "success" : true,
-            "message" : `Success Delete article with id => ${articleId}`
-        };
-        res.json(opSuccess);
-    } else {
-        res.status(404);
-        res.json("article doesn't exist");
-    }
+    })
 };
 
 app.delete(`/articles/:id`, deleteArticleById);
