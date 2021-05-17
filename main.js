@@ -35,8 +35,14 @@ const articles = [
 
 // getAllArticles:
 const getAllArticles = (req,res)=>{
-    res.status(200);
-    res.json(articles);
+    Article.find({})
+    .then((result)=>{
+        res.status(200);
+        res.json(result);
+    })
+    .catch((err)=>{
+        res.json(err)
+    })
 }
 app.get("/articles",getAllArticles);
 
@@ -54,8 +60,8 @@ const getAnArticleById = (req,res)=>{
         res.status(200);
         res.json(articles[articleId-1]);
     } else {
-    res.status(404);
-    res.json(`article doesn't exist`);
+        res.status(404);
+        res.json(`article doesn't exist`);
     }
 };
 app.get(`/articles/search_2`,getAnArticleById);
@@ -64,16 +70,15 @@ app.get(`/articles/search_2`,getAnArticleById);
 const getArticlesByAuthor = (req,res)=>{
     const author = req.query.author;
     console.log(author);
-    const foundArticles = articles.filter((elem,i)=>{
-        return author === elem.author
+    Article.find({author:author})
+    .then((result)=>{
+        res.status(200)
+        res.json(result);
     })
-    if (foundArticles.length > 0){
-        res.status(200);
-        res.json(foundArticles)
-    } else{
+    .catch((err)=>{
         res.status(404);
-        res.json("articles not found");
-    }
+        res.json(err);
+    })
 }
 
 app.get(`/articles/search_1`, getArticlesByAuthor);
