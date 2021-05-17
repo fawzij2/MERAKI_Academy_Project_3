@@ -102,31 +102,37 @@ const createNewArticle = (req,res)=>{
 app.post(`/articles`, createNewArticle)
 
 // updateAnArticleById
-const updateAnArticleById = (req,res)=>{
-    const articleId = JSON.parse(req.params.id);
-    let found = false
-    for (let i = 0 ;  i < articles.length ; i++){
-        let idSearch = articles[i].id;
-        if(articleId === idSearch){
-            found = true
-        }
-    }
-    if (found){
+const updateAnArticleById = async (req,res)=>{
+    const articleId = req.params.id;
         if (req.body.title){
-            articles[articleId-1].title = req.body.title;
+            await Article.updateOne({_id:articleId},{title:req.body.title},(err,result)=>{
+                if (err){
+                    res.json(err)
+                }
+            });
         };
         if (req.body.description){
-            articles[articleId-1].description = req.body.description;
+            await Article.updateOne({_id:articleId},{description:req.body.description},(err,result)=>{
+                if (err){
+                    res.json(err)
+                }
+            });
         };
         if (req.body.author){
-            articles[articleId-1].author = req.body.author;
+            await Article.updateOne({_id:articleId},{author:req.body.author},(err,result)=>{
+                if (err){
+                    res.json(err)
+                }
+            });
         };
-        res.json(articles[articleId-1]);
-    } else {
-        res.status(404);
-        res.json(`article doesn't exist`);
-    };
-};
+        Article.find({_id:articleId})
+        .then((result)=>{
+            res.json(result)
+        }).catch((err)=>{
+            res.json(err)
+        })
+} 
+
 
 app.put(`/articles/:id`,updateAnArticleById);
 
