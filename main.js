@@ -1,5 +1,6 @@
 const express = require("express");
 const {uuid} = require(`uuidv4`);
+const db = require("./db");
 
 const app = express();
 const PORT = 5000;
