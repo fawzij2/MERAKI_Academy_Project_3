@@ -1,6 +1,7 @@
 const express = require("express");
 const {uuid} = require(`uuidv4`);
 const db = require("./db");
+const { User, Article } = require("./schema");
 
 const app = express();
 const PORT = 5000;
@@ -165,6 +166,31 @@ const deleteArticlesByAuthor = (req,res)=>{
 }
 
 app.delete(`/articles`, deleteArticlesByAuthor);
+
+//createNewAuthor
+const createNewAuthor = (req,res)=>{
+    const {firstname,lastname,age,country,email,password} = req.body
+    const newAuthor = new User ({
+        firstname,
+        lastname,
+        age,
+        country,
+        email,
+        password,
+    });
+
+    newAuthor.save()
+    .then((result)=>{
+        res.status(201)
+        res.json(result);
+    })
+    .catch((err)=>{
+        res.json(err)
+    })
+};
+
+app.post("/users",createNewAuthor);
+
 app.listen(PORT, ()=>{
     console.log(`the server is running on port: ${PORT}`);
 })
