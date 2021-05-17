@@ -81,17 +81,22 @@ app.get(`/articles/search_1`, getArticlesByAuthor);
 
 // createNewArticle
 const createNewArticle = (req,res)=>{
-    const addedArticle = {
-        "title" : req.body.title,
-        "description" : req.body.description,
-        "author" : req.body.author,
-        "id" : uuid()
-    }
-    articles.push(addedArticle);
-    console.log(articles);
-    res.status(201);
-    res.json(addedArticle);
-}
+    const {title, description, author} = req.body
+    const addedArticle = new Article({
+        title,
+        description,
+        author
+    })
+    
+    addedArticle.save()
+    .then((result)=>{
+        res.status(201);
+        res.json(result);
+    })
+    .catch((err)=>{
+        res.json(err)
+    })
+};
 
 app.post(`/articles`, createNewArticle)
 
@@ -169,10 +174,10 @@ app.delete(`/articles`, deleteArticlesByAuthor);
 
 //createNewAuthor
 const createNewAuthor = (req,res)=>{
-    const {firstname,lastname,age,country,email,password} = req.body
+    const {firstName,lastName,age,country,email,password} = req.body
     const newAuthor = new User ({
-        firstname,
-        lastname,
+        firstName,
+        lastName,
         age,
         country,
         email,
