@@ -15,8 +15,16 @@ const articles = new mongoose.Schema({
     author : { type: mongoose.Schema.ObjectId, ref: "User" },
 })
 
+const comments = new mongoose.Schema({
+    comment: String,
+    commenter:{type: mongoose.Schema.ObjectId, ref:"User"},
+    article: {type: mongoose.Schema.ObjectId, ref:"Article"}
+})
+
 const User = mongoose.model("User",users);
 const Article = mongoose.model("Article",articles);
+const Comment = mongoose.model("Comment",comments);
 
 module.exports.User = User;
 module.exports.Article = Article;
+module.exports.Comment = Comment;

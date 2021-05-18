@@ -1,7 +1,7 @@
 const express = require("express");
 const {uuid} = require(`uuidv4`);
 const db = require("./db");
-const { User, Article } = require("./schema");
+const { User, Article, Comment } = require("./schema");
 
 const app = express();
 const PORT = 5000;
@@ -215,6 +215,32 @@ const login = (req,res)=>{
     })
 };
 app.post(`/login`,login);
+
+
+//  createNewComment
+const createNewComment =(req,res)=>{
+    const {comment,commenter} = req.body;
+    const newComment = new Comment({
+        comment,
+        commenter,
+        article: req.params.id
+    });
+
+    newComment.save()
+    .then((result)=>{
+        const resultJS = result.toObject();
+        delete resultJS.article
+        res.status(201);
+        res.json(resultJS);
+    })
+    .catch((err)=>{
+        res.json(err);
+    })
+}
+
+app.post(`/articles/:id/comments`,createNewComment);
+
+
 app.listen(PORT, ()=>{
     console.log(`the server is running on port: ${PORT}`);
 })
