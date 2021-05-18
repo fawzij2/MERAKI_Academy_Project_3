@@ -150,6 +150,7 @@ const deleteArticleById = (req,res)=>{
 
 app.delete(`/articles/:id`, deleteArticleById);
 
+
 // deleteArticlesByAuthor
 const deleteArticlesByAuthor = (req,res)=>{
     const author = req.body.author;
@@ -167,6 +168,7 @@ const deleteArticlesByAuthor = (req,res)=>{
 }
 
 app.delete(`/articles`, deleteArticlesByAuthor);
+
 
 //createNewAuthor
 const createNewAuthor = (req,res)=>{
@@ -192,6 +194,27 @@ const createNewAuthor = (req,res)=>{
 
 app.post("/users",createNewAuthor);
 
+
+//login
+const login = (req,res)=>{
+    const email = req.body.email;
+    const password = req.body.password;
+
+    User.find({email:email, password:password})
+    .then((result)=>{
+        if (result.length > 0){
+            res.status(200);
+            res.json(`Valid login credentials`);
+        } else{
+            res.status(404);
+            res.json(`Invalid login credentials`);
+        }
+    })
+    .catch((err)=>{
+        res.json(err)
+    })
+};
+app.post(`/login`,login);
 app.listen(PORT, ()=>{
     console.log(`the server is running on port: ${PORT}`);
 })
