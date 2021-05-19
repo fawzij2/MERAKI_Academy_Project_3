@@ -4,8 +4,10 @@ const db = require("./db");
 const { User, Article, Comment } = require("./schema");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
+const jwt = require("jsonwebtoken")
 
 const app = express();
+const SECRET = process.env.SECRET
 const PORT = 5000;
 
 app.use(express.json());
@@ -201,20 +203,53 @@ app.post("/users",createNewAuthor);
 //login
 const login = (req,res)=>{
     const email = req.body.email;
+    console.log(email);
     const password = req.body.password;
 
-    User.find({email:email, password:password})
-    .then((result)=>{
-        if (result.length > 0){
-            res.status(200);
-            res.json(`Valid login credentials`);
-        } else{
-            res.status(404);
-            res.json(`Invalid login credentials`);
-        }
-    })
+    User.find({email:email})
+    .then(async (result)=>{
+        console.log(result[0].password); 
+        const passwordCompare = await bcrypt.compare(password,result[0].password,(err,result1)=>{
+            if (result1){
+                const payload = {
+                        userId: result[0]._id,
+                        country: result[0].country
+                    };
+                    
+                    const options = {
+                        expiresIn: "1hr",
+                    };
+                    const token = jwt.sign(payload, SECRET, options);
+                    console.log(token);
+                    res.status(200);
+                    res.json(token);
+                } else {
+                    res.status(403);
+                    res.json(`The password you’ve entered is incorrect`);
+                }
+            })
+        })
+    //     if (passwordCompare){
+    //     const payload = {
+    //             userId: result[0]._id,
+    //             country: result[0].country
+    //         };
+            
+    //         const options = {
+    //             expiresIn: "1hr",
+    //         };
+    //         const token = jwt.sign(payload, SECRET, options);
+    //         console.log(token);
+    //         res.status(200);
+    //         res.json(token);
+    //     } else {
+    //         res.status(403);
+    //         res.json(`The password you’ve entered is incorrect`);
+    //     }
+    // })
     .catch((err)=>{
-        res.json(err)
+        res.status(404)
+        res.json(`the email doesn't exist`)
     })
 };
 app.post(`/login`,login);
