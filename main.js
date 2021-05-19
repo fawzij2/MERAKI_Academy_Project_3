@@ -2,6 +2,8 @@ const express = require("express");
 const {uuid} = require(`uuidv4`);
 const db = require("./db");
 const { User, Article, Comment } = require("./schema");
+const bcrypt = require("bcrypt");
+require("dotenv").config();
 
 const app = express();
 const PORT = 5000;
@@ -171,6 +173,7 @@ app.delete(`/articles`, deleteArticlesByAuthor);
 
 
 //createNewAuthor
+
 const createNewAuthor = (req,res)=>{
     const {firstName,lastName,age,country,email,password} = req.body
     const newAuthor = new User ({
