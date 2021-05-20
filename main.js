@@ -207,13 +207,15 @@ const login = (req,res)=>{
     const password = req.body.password;
 
     User.find({email:email})
+    .populate("role","role permissions")
     .then(async (result)=>{
         console.log(result[0].password); 
         const passwordCompare = await bcrypt.compare(password,result[0].password,(err,result1)=>{
             if (result1){
                 const payload = {
                         userId: result[0]._id,
-                        country: result[0].country
+                        country: result[0].country,
+                        role: result[0].role
                     };
                     
                     const options = {
@@ -280,7 +282,21 @@ const createNewComment =(req,res)=>{
 
 app.post(`/articles/:id/comments`,authentication,createNewComment);
 
+app.post(`/roles`,(req,res)=>{
+    const {role,permissions} = req.body;
+    const accountRole = new Role ({
+        role,
+        permissions
+    })
 
+    accountRole.save()
+    .then((result)=>{
+        res.json(result)
+    })
+    .catch((err)=>{
+        res.json(err);
+    })
+})
 app.listen(PORT, ()=>{
     console.log(`the server is running on port: ${PORT}`);
 })
