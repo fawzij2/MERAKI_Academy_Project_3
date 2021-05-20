@@ -203,7 +203,6 @@ app.post("/users",createNewAuthor);
 //login
 const login = (req,res)=>{
     const email = req.body.email;
-    console.log(email);
     const password = req.body.password;
 
     User.find({email:email})
@@ -213,22 +212,22 @@ const login = (req,res)=>{
         const passwordCompare = await bcrypt.compare(password,result[0].password,(err,result1)=>{
             if (result1){
                 const payload = {
-                        userId: result[0]._id,
-                        country: result[0].country,
-                        role: result[0].role
-                    };
-                    
-                    const options = {
-                        expiresIn: "1hr",
-                    };
-                    const token = jwt.sign(payload, SECRET, options);
-                    console.log(token);
-                    res.status(200);
-                    res.json(token);
-                } else {
-                    res.status(403);
-                    res.json(`The password you’ve entered is incorrect`);
-                }
+                    userId: result[0]._id,
+                    country: result[0].country,
+                    role: result[0].role
+                };
+                
+                const options = {
+                    expiresIn: "1hr",
+                };
+                const token = jwt.sign(payload, SECRET, options);
+                console.log(token);
+                res.status(200);
+                res.json(token);
+            } else {
+                res.status(403);
+                res.json(`The password you’ve entered is incorrect`);
+            }
             })
         })
     .catch((err)=>{
@@ -253,6 +252,7 @@ const authentication = (req,res,next)=>{
                 return res.json(err_massege);
             }
             if(result){
+                req.body.token = token
                 next()
             }
         })
