@@ -229,24 +229,6 @@ const login = (req,res)=>{
                 }
             })
         })
-    //     if (passwordCompare){
-    //     const payload = {
-    //             userId: result[0]._id,
-    //             country: result[0].country
-    //         };
-            
-    //         const options = {
-    //             expiresIn: "1hr",
-    //         };
-    //         const token = jwt.sign(payload, SECRET, options);
-    //         console.log(token);
-    //         res.status(200);
-    //         res.json(token);
-    //     } else {
-    //         res.status(403);
-    //         res.json(`The password you’ve entered is incorrect`);
-    //     }
-    // })
     .catch((err)=>{
         res.status(404)
         res.json(`the email doesn't exist`)
@@ -256,6 +238,26 @@ app.post(`/login`,login);
 
 
 //  createNewComment
+const authentication = (req,res,next)=>{
+    if (req.headers.authorization){
+        const token = req.headers.authorization.split(" ")[1];
+        jwt.verify(token,SECRET,(err,result)=>{
+            if(err){
+                res.status(403);
+                const err_massege = {
+                    message: "the token is invalid or has expired",
+                    status: 403
+                }
+                return res.json(err_massege);
+            }
+            if(result){
+                next()
+            }
+        })
+    } else{
+        res.json("please enter token")
+    }
+}
 const createNewComment =(req,res)=>{
     const {comment,commenter} = req.body;
     const newComment = new Comment({
@@ -276,7 +278,7 @@ const createNewComment =(req,res)=>{
     })
 }
 
-app.post(`/articles/:id/comments`,createNewComment);
+app.post(`/articles/:id/comments`,authentication,createNewComment);
 
 
 app.listen(PORT, ()=>{
