@@ -252,12 +252,26 @@ const authentication = (req,res,next)=>{
                 return res.json(err_massege);
             }
             if(result){
-                req.body.token = token
+                req.token = result
                 next()
             }
         })
     } else{
         res.json("please enter token")
+    }
+}
+const authorization = (str)=>{
+    return (req,res,next)=>{
+        const permissions = req.token.role.permissions;
+        const forbidden =  { 
+            message: 'forbidden ', 
+            status: 403 
+        }
+        if(permissions.includes(str)){
+            return next()
+        }
+        res.status(403);
+        res.json(forbidden)
     }
 }
 const createNewComment =(req,res)=>{
@@ -280,7 +294,7 @@ const createNewComment =(req,res)=>{
     })
 }
 
-app.post(`/articles/:id/comments`,authentication,createNewComment);
+app.post(`/articles/:id/comments`,authentication,authorization(`CREATE_COMMENTS`),createNewComment);
 
 app.post(`/roles`,(req,res)=>{
     const {role,permissions} = req.body;
