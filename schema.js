@@ -31,6 +31,11 @@ const comments = new mongoose.Schema({
     article: {type: mongoose.Schema.ObjectId, ref:"Article"}
 })
 
+const roles = new mongoose.Schema({
+    role:{type: String, required:true},
+    permissions:{type:[String], required:true}
+})
+
 const User = mongoose.model("User",users);
 const Article = mongoose.model("Article",articles);
 const Comment = mongoose.model("Comment",comments);
