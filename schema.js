@@ -7,7 +7,8 @@ const users = new mongoose.Schema({
     age: {type:Number, required:true},
     country: String,
     email: {type:String, required:true, unique:true},
-    password: {type:String, required:true}
+    password: {type:String, required:true},
+    role: {type: mongoose.Schema.ObjectId, ref:"Role"}
 });
 
 users.pre('save',async function(){
@@ -39,7 +40,9 @@ const roles = new mongoose.Schema({
 const User = mongoose.model("User",users);
 const Article = mongoose.model("Article",articles);
 const Comment = mongoose.model("Comment",comments);
+const Role = mongoose.model("Role",roles);
 
 module.exports.User = User;
 module.exports.Article = Article;
 module.exports.Comment = Comment;
+module.exports.Role = Role;

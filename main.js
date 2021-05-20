@@ -1,7 +1,7 @@
 const express = require("express");
 const {uuid} = require(`uuidv4`);
 const db = require("./db");
-const { User, Article, Comment } = require("./schema");
+const { User, Article, Comment, Role } = require("./schema");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 const jwt = require("jsonwebtoken")
