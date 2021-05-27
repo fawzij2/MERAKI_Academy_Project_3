@@ -18,7 +18,7 @@
     font-size: 18px;
 }
 
-.register_button{
+.reglog_button{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -41,4 +41,34 @@
     border-radius: 5px;
     background-color: rgb(124, 185, 124);
     color: rgb(1, 85, 1);
+}
+
+.login{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border: 5px purple solid;
+    font-size: 18px;
+}
+
+.logResponse{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    border-radius: 5px;
+    background-color: rgb(240, 23, 23);
+    color: rgb(54, 32, 32);
+}
+
+.dashboard{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border: 5px blue solid;
+    font-size: 18px;
+}
+
+.dashnew{
+    display: none;
 }

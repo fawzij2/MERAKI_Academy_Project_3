@@ -11,6 +11,8 @@ const Register = ()=>{
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [regResponse, setRegResponse] = useState(``)
+    document.querySelector(".dashnew").style.display="none";
+    document.querySelector(".logreg").style.display = "block";
 
     return(<>
         <div className="register">
@@ -33,7 +35,7 @@ const Register = ()=>{
             <input className="sections" type="password" placeholder={`password here`} onChange={(e)=>{
                 setPassword(e.target.value)
             }} />
-            <button className="register_button sections" onClick={()=>{
+            <button className="reglog_button sections" onClick={()=>{
                 axios.post("http://localhost:5000/users",{
                     firstName,
                     lastName,
