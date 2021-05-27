@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('./db/db');
+const cors = require('cors')
 require('dotenv').config();
 
 //routers
@@ -10,6 +11,7 @@ const commentsRouter = require('./routers/routes/comments');
 const roleRouter = require('./routers/routes/role');
 
 const app = express();
+app.use(cors())
 
 //built-in middlewares
 app.use(express.json());
