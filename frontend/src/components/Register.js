@@ -41,9 +41,9 @@ const Register = ()=>{
                     email,
                     password
                 }).then((respons)=>{
-                    setRegResponse = (<div className="regResponse sections">The user has been created successfully</div>);
+                    setRegResponse(<div className="regResponse sections">The user has been created successfully</div>);
                 }).catch((err)=>{
-                    setRegResponse = (<div className="regResponse sections">Error happened while register, please try again</div>);
+                    setRegResponse(<div className="regResponse sections">Error happened while register, please try again</div>);
                 }) 
             }}>
                 Register

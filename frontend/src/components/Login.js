@@ -8,6 +8,7 @@ const Login = ({getToken})=>{
     const [password, setPassword] = useState();
     const [logResponse, setLogResponse] = useState();
     let history = useHistory();
+    
     return(<>
         <div className="login">
             <p>Login:</p>
@@ -28,10 +29,10 @@ const Login = ({getToken})=>{
                 }
                 catch (err) {
                     if(err.response.status === 404){
-                        setLogResponse = <div className="logResponse sections">The email doesn't exist</div>;
+                        setLogResponse(<div className="logResponse sections">The email doesn't exist</div>);
                     }
                     if (err.response.status === 403){
-                        setLogResponse = <div className="logResponse sections">The password you've entered is incorrect</div>;
+                        setLogResponse(<div className="logResponse sections">The password you've entered is incorrect</div>);
                     }
                 }
             }} >Login</button>
