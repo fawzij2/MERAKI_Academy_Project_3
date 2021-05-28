@@ -3,13 +3,11 @@ import React,{useState} from "react";
 import "./../App.css";
 import { useHistory } from "react-router-dom";
 
-const Login = ()=>{
+const Login = ({getToken})=>{
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
-    const [logResponse, setLogResponse] = useState(``);
+    const [logResponse, setLogResponse] = useState();
     let history = useHistory();
-    document.querySelector(".dashnew").style.display="none";
-    document.querySelector(".logreg").style.display = "block";
     return(<>
         <div className="login">
             <p>Login:</p>
@@ -19,26 +17,25 @@ const Login = ()=>{
             <input className="sections" type="password" placeholder="password here" onChange={(e)=>{
                 setPassword(e.target.value)
             }} />
-            <button className="sections reglog_button" onClick={()=>{
-                axios.post("http://localhost:5000/login",{
-                    email,
-                    password
-                }).then((response)=>{
-                    history.push("/dashboard")
-                }).catch((err)=>{
+            <button className="sections reglog_button" onClick={async()=>{
+                try {
+                    const resp = await axios.post("http://localhost:5000/login",{
+                        email,
+                        password
+                    })
+                    history.push("/dashboard");
+                    getToken(resp.data.token)
+                }
+                catch (err) {
                     if(err.response.status === 404){
-                        setLogResponse("The email doesn't exist");
-                        document.querySelector(".logResponse").style.display = "flex";
+                        setLogResponse = <div className="logResponse sections">The email doesn't exist</div>;
                     }
                     if (err.response.status === 403){
-                        setLogResponse("The password you've entered is incorrect");
-                        document.querySelector(".logResponse").style.display = "flex";
+                        setLogResponse = <div className="logResponse sections">The password you've entered is incorrect</div>;
                     }
-                })
+                }
             }} >Login</button>
-            <div className="logResponse sections">
-                {logResponse}
-            </div>
+            {logResponse}
         </div>
     </>)
 }

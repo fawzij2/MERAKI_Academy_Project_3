@@ -34,7 +34,7 @@
 }
 
 .regResponse{
-    display: none;
+    display: flex;
     justify-content: center;
     align-items: center;
     height: 50px;
@@ -52,7 +52,7 @@
 }
 
 .logResponse{
-    display: none;
+    display: flex;
     justify-content: center;
     align-items: center;
     height: 50px;
@@ -69,6 +69,12 @@
     font-size: 18px;
 }
 
-.dashnew{
-    display: none;
+
+
+.newArticle{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border: 5px orange solid;
+    font-size: 18px;
 }

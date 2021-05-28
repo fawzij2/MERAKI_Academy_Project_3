@@ -3,8 +3,7 @@ import React,{useState} from "react";
 import "./../App.css";
 
 const Dashboard = ()=>{
-    document.querySelector(".dashnew").style.display="block";
-    document.querySelector(".logreg").style.display = "none";
+    
     return (<>
         <div className="dashboard">
             <p>Dashboard</p>

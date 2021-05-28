@@ -11,9 +11,6 @@ const Register = ()=>{
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [regResponse, setRegResponse] = useState(``)
-    document.querySelector(".dashnew").style.display="none";
-    document.querySelector(".logreg").style.display = "block";
-
     return(<>
         <div className="register">
             <p>Register:</p>
@@ -44,18 +41,14 @@ const Register = ()=>{
                     email,
                     password
                 }).then((respons)=>{
-                    setRegResponse(`The user has been created successfully`)
-                    document.querySelector(".regResponse").style.display = "flex";
+                    setRegResponse = (<div className="regResponse sections">The user has been created successfully</div>);
                 }).catch((err)=>{
-                    setRegResponse(`Error happened while register, please try again`);
-                    document.querySelector(".regResponse").style.display = "flex";
+                    setRegResponse = (<div className="regResponse sections">Error happened while register, please try again</div>);
                 }) 
             }}>
                 Register
             </button>
-            <div className="regResponse sections">
-                {regResponse}
-            </div>
+            {regResponse}
         </div>
     </>)
 }
